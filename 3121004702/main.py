@@ -1,4 +1,5 @@
 # 导入所需的库
+import difflib
 import sys
 
 import jieba # 中文分词库
@@ -11,60 +12,6 @@ def read_file(file_name):
     with open(file_name, 'r', encoding='utf-8') as f:
         content = f.read()
     return content
-
-# 定义一个函数来判断文件内容是中文还是英文
-def detect_language(text):
-    # 使用nltk库中的stopwords列表来判断
-    # nltk.download("stopwords")
-    stopwords = nltk.corpus.stopwords.words('english')
-    # 统计text中出现的英文停用词的数量
-    count = 0
-    for word in text.split():
-        if word.lower() in stopwords:
-            count += 1
-    # 如果出现的英文stop words数量超过text单词总数的一半，则认为是英文，否则认为是中文
-    if count > len(text.split()) / 2:
-        return 'english'
-    else:
-        return 'chinese'
-
-# 定义一个函数来计算两个字符串的余弦相似度
-def cosine_similarity(str1, str2):
-    # 判断两个字符串的语言是否一致
-    lang1 = detect_language(str1)
-    lang2 = detect_language(str2)
-    if lang1 != lang2:
-        print('两个文件的语言不一致，请检查输入')
-        return None
-    # 根据语言选择分词库
-    if lang1 == 'chinese':
-        tokenizer = jieba.cut # 中文分词函数
-    else:
-        tokenizer = nltk.word_tokenize # 英文分词函数
-    # 使用分词函数进行分词
-    words1 = tokenizer(str1)
-    words2 = tokenizer(str2)
-    # 使用空格连接分词结果
-    text1 = ' '.join(words1)
-    text2 = ' '.join(words2)
-    # 使用TfidfVectorizer类来转换成词袋模型并加权
-    vectorizer = TfidfVectorizer()
-    # 计算两个文本的TF-IDF矩阵
-    tfidf_matrix = vectorizer.fit_transform([text1, text2])
-    # 转换成numpy数组
-    tfidf_array = tfidf_matrix.toarray()
-    # 取出两个向量
-    vector1 = tfidf_array[0]
-    vector2 = tfidf_array[1]
-    # 计算两个向量的点积
-    dot_product = np.dot(vector1, vector2)
-    # 计算两个向量的模长
-    norm1 = np.linalg.norm(vector1)
-    norm2 = np.linalg.norm(vector2)
-    # 计算余弦相似度
-    cos_sim = dot_product / (norm1 * norm2)
-    return cos_sim
-
 
 if __name__ =="__main__":
 
@@ -88,9 +35,10 @@ if __name__ =="__main__":
 
 
     # 计算余弦相似度
-    similarity = cosine_similarity(original_text, plagiarized_text)
+    similarity = difflib.SequenceMatcher(None, original_text, plagiarized_text).ratio()
+
     # 计算重复率
-    repetition_rate = 1 - similarity
+    repetition_rate = similarity
     # 输出结果
 
 
@@ -99,9 +47,9 @@ if __name__ =="__main__":
 
 
     # 将相似度转换为百分比形式
-    repetition_percentage = round(repetition_rate * 100, 2)
+    # repetition_percentage = round(repetition_rate * 100, 2)
 
-    print(f'重复率为{repetition_percentage}')
+    print(f'重复率为{repetition_rate}')
 
     # 将结果写入输出文件
     # with open(output_file, 'w', encoding='utf-8') as f:
