@@ -74,9 +74,9 @@ def cosine_similarity(str1, str2):
 
 
 if __name__ == "__main__":
-    # original_file = sys.argv[1]  # 原文文件路径
-    # plagiarized_file = sys.argv[2]  # 抄袭版文件路径
-    # output_file = sys.argv[3]  # 输出文件路径
+    original_file = sys.argv[1]  # 原文文件路径
+    plagiarized_file = sys.argv[2]  # 抄袭版文件路径
+    output_file = sys.argv[3]  # 输出文件路径
 
     # # 定义原文文件和抄袭版文件的路径
     original_file = 'original.txt'
@@ -92,5 +92,5 @@ if __name__ == "__main__":
 
     print(f'重复率为{repetition_percentage}%')
     # 将结果写入输出文件
-    # with open(output_file, 'w', encoding='utf-8') as f:
-    #     f.write(f'重复率为{repetition_percentage}%')
+    with open(output_file, 'w', encoding='utf-8') as f:
+        f.write(f'重复率为{repetition_percentage}%')
