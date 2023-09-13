@@ -1,6 +1,5 @@
 # 导入所需的库
 import sys
-
 import jieba  # 中文分词库
 import nltk  # 英文分词库
 import numpy as np  # 数学计算库
@@ -20,7 +19,8 @@ def read_file(file_name):
 @profile
 def detect_language(text):
     # 使用nltk库中的stopwords列表来判断
-    # nltk.download("stopwords")
+    nltk.download("stopwords")
+    nltk.download('punkt')
     stopwords = nltk.corpus.stopwords.words('english')
     # 统计text中出现的英文停用词的数量
     count = 0
@@ -74,13 +74,13 @@ def cosine_similarity(str1, str2):
 
 
 if __name__ == "__main__":
-    original_file = sys.argv[1]  # 原文文件路径
-    plagiarized_file = sys.argv[2]  # 抄袭版文件路径
-    output_file = sys.argv[3]  # 输出文件路径
+    # original_file = sys.argv[1]  # 原文文件路径
+    # plagiarized_file = sys.argv[2]  # 抄袭版文件路径
+    # output_file = sys.argv[3]  # 输出文件路径
 
     # # 定义原文文件和抄袭版文件的路径
-    # original_file = 'original.txt'
-    # plagiarized_file = 'plagiarized.txt'
+    original_file = 'original.txt'
+    plagiarized_file = 'plagiarized.txt'
     # 读取文件内容
     original_text = read_file(original_file)
     plagiarized_text = read_file(plagiarized_file)
@@ -92,5 +92,5 @@ if __name__ == "__main__":
 
     print(f'重复率为{repetition_percentage}%')
     # 将结果写入输出文件
-    with open(output_file, 'w', encoding='utf-8') as f:
-        f.write(f'重复率为{repetition_percentage}%')
+    # with open(output_file, 'w', encoding='utf-8') as f:
+    #     f.write(f'重复率为{repetition_percentage}%')
